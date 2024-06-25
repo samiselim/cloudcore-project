@@ -116,8 +116,9 @@ jobs:
               with:
                 snyk-version: latest
               env:
-                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
-
+                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+            - name: Snyk Auth
+              run: snyk auth ${{ secrets.SNYK_TOKEN }}
             - name: Snyk Code Test
               run: |
                 snyk code test --all-projects
@@ -138,8 +139,10 @@ jobs:
               with:
                 snyk-version: latest
               env:
-                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
-
+                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+            - name: Snyk Auth
+              run: snyk auth ${{ secrets.SNYK_TOKEN }}
+              
             - name: Snyk Code Test
               run: |
                 snyk code test --all-projects
