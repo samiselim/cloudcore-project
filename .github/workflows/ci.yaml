@@ -142,8 +142,57 @@ jobs:
                 SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
             - name: Snyk Auth
               run: snyk auth ${{ secrets.SNYK_TOKEN }}
-              
+
             - name: Snyk Code Test
               run: |
                 snyk code test --all-projects
               continue-on-error: true
+    frontend-image:
+        needs: frontend-security
+        runs-on: ubuntu-latest
+        permissions: 
+            contents: read # to read the repo 
+            security-events: write # to write security reports 
+            actions: read # to use actions 
+        steps:
+          - name: Checkout the Repo 
+            uses: actions/checkout@v4
+
+          - name: Build Image
+            working-directory: quiz-app
+            run: |
+              echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+              docker build . -t ${{ secrets.DOCKER_USER }}/frontend-js:${{ github.sha }}
+              docker push ${{ secrets.DOCKER_USER }}/frontend-js:${{ github.sha }}
+
+          - name: Run Trivy Vulnerability scanner 
+            uses: aquasecurity/trivy-action@master
+            with:
+                image-ref: 'docker.io/${{ secrets.DOCKER_USER }}/frontend-js:${{ github.sha }}'
+                format: 'sarif'
+                output: trivy-result.sarif
+                severity: 'CRITICAL,HIGH'
+
+          - name: Running Snyk using CLI | Install Snyk CLI
+            uses: snyk/actions/setup@master
+            with:
+                snyk-version: latest
+            env:
+              SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+          - name: Snyk Auth
+            run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+          - name: Snyk Container Monitor 
+            run: |
+              snyk container monitor ${{ secrets.DOCKER_USER }}/frontend-js:${{ github.sha }} --file=Dockerfile
+            working-directory: quiz-app
+
+          - name: Run Snyk scan for frontend image
+            uses: snyk/actions/docker@master
+            with:
+              image: ${{ secrets.DOCKER_USER }}/frontend-js:${{ github.sha }}
+              args: --file=quiz-app/Dockerfile --severity-threshold=high
+            env:
+                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+            continue-on-error: true
