@@ -246,7 +246,7 @@ jobs:
                 SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
             continue-on-error: true
     k8s-scan:
-        needs: [backend-security , frontend-security]
+        needs: [backend-image , frontend-image]
         runs-on: ubuntu-latest
         steps:
           - name: Checkout the Repo 
