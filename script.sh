@@ -3,8 +3,8 @@
 
 set -e # Exit script immediately on first error.
 
-# Log all output to file
-exec >> /var/log/init-script.log 2>&1
+# # Log all output to file
+# exec >> /var/log/init-script.log 2>&1
 
 echo "Starting initialization script..."
 
@@ -44,35 +44,35 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update
 sudo apt install terraform -y
 
-# Install Trivy
-sudo apt-get install wget apt-transport-https gnupg lsb-release -y
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-sudo apt update
-sudo apt install trivy -y
+# # Install Trivy
+# sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+# wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+# echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+# sudo apt update
+# sudo apt install trivy -y
 
-# Install Argo CD with Kubectl
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
-sudo apt install jq -y
+# # Install Argo CD with Kubectl
+# kubectl create namespace argocd
+# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
+# sudo apt install jq -y
 
-# Installing Helm
-sudo snap install helm --classic
+# # Installing Helm
+# sudo snap install helm --classic
 
-# Adding Helm repositories
+# # Adding Helm repositories
 
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+# helm repo update
 
-# Install Prometheus
-helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+# # Install Prometheus
+# helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
 
-# Install Grafana
-helm install grafana grafana/grafana --namespace monitoring --create-namespace
+# # Install Grafana
+# helm install grafana grafana/grafana --namespace monitoring --create-namespace
 
-# Install ingress-nginx
-helm install ingress-nginx ingress-nginx/ingress-nginx
+# # Install ingress-nginx
+# helm install ingress-nginx ingress-nginx/ingress-nginx
 
 echo "Initialization script completed successfully."
