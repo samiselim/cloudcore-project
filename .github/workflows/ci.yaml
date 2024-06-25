@@ -101,3 +101,62 @@ jobs:
                 args: >
                   -Dsonar.organization=sami-devsecops-org
                   -Dsonar.projectKey=sami-devsecops-org_backend
+    frontend-security:
+        needs: frontend-test
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./quiz-app
+        steps:
+            - name: Checkout the Repo 
+              uses: actions/checkout@v4
+
+            - name: Run Snyk Test using Actions 
+              uses: snyk/actions/node@master
+              env:
+                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
+              continue-on-error: true
+
+            - name: Running Snyk using CLI | Install Snyk CLI
+              uses: snyk/actions/setup@master
+              with:
+                snyk-version: latest
+              env:
+                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
+
+            - name: Snyk Authentication
+              run: snyk auth ${{ secrets.SNYK_ID }}
+
+            - name: Snyk Code Test
+              run: snyk code test --all-projects
+              continue-on-error: true
+
+    backend-security:
+        needs: backend-test
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./backend
+        steps:
+            - name: Checkout the Repo 
+              uses: actions/checkout@v4
+
+            - name: Run Snyk Test using Actions 
+              uses: snyk/actions/node@master
+              env:
+                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
+              continue-on-error: true
+
+            - name: Running Snyk using CLI | Install Snyk CLI
+              uses: snyk/actions/setup@master
+              with:
+                snyk-version: latest
+              env:
+                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
+
+            - name: Snyk Authentication
+              run: snyk auth ${{ secrets.SNYK_ID }}
+
+            - name: Snyk Code Test
+              run: snyk code test --all-projects
+              continue-on-error: true
