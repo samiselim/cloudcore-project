@@ -39,9 +39,6 @@ jobs:
                 npm test
               env:
                 CI: true
-            - name: build 
-              working-directory: ./quiz-app
-              run: npm run build
             - name: SonarCloud Scan
               uses: SonarSource/sonarcloud-github-action@master
               env:
