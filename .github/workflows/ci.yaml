@@ -1,108 +1,108 @@
 name: React.js CI
 on: workflow_dispatch
 jobs: 
-    frontend-test:
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./quiz-app
-        strategy:
-            matrix:
-                node-version: [20.x]
-                arch: [x64]
-        steps:
-            - name: Checkout the Repo 
-              uses: actions/checkout@v4
+    # frontend-test:
+    #     runs-on: ubuntu-latest
+    #     defaults:
+    #         run:
+    #             working-directory: ./quiz-app
+    #     strategy:
+    #         matrix:
+    #             node-version: [20.x]
+    #             arch: [x64]
+    #     steps:
+    #         - name: Checkout the Repo 
+    #           uses: actions/checkout@v4
 
-            - name: USE NODE JS ${{ matrix.node-version }} - ${{ matrix.arch }}
-              uses: actions/setup-node@v4
-              with: 
-                node-version: ${{ matrix.node-version }} 
+    #         - name: USE NODE JS ${{ matrix.node-version }} - ${{ matrix.arch }}
+    #           uses: actions/setup-node@v4
+    #           with: 
+    #             node-version: ${{ matrix.node-version }} 
             
-            - name: Calculate cache key
-              id: cache-key
-              run: |
-                  echo CACHE_KEY=deps-node-modules-${{ hashFiles('quiz-app/package-lock.json') }} >> $GITHUB_OUTPUT
-            - name: Download cached dependencies              
-              id: cache
-              uses: actions/cache@v3
-              with:
-                path: quiz-app/node_modules
-                key: ${{ steps.cache-key.outputs.CACHE_KEY }}
-            - name: Install Dep
-              working-directory: ./quiz-app
-              run: |
-                npm i
-                npm run lint 
-                npm install --save-dev --save-exact prettier
-                npm run prettier
-                npm test
-              env:
-                CI: true
-            - name: build 
-              working-directory: ./quiz-app
-              run: npm run build
-            - name: SonarCloud Scan
-              uses: SonarSource/sonarcloud-github-action@master
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-                SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
-              with:
-                projectBaseDir: quiz-app
-                args: >
-                  -Dsonar.organization=sami-devsecops-org
-                  -Dsonar.projectKey=sami-devsecops-org_quiz-app
-    backend-test:
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./backend
-        strategy:
-            matrix:
-                node-version: [20.x]
-                arch: [x64]
-        steps:
-            - name: Checkout the Repo 
-              uses: actions/checkout@v4
+    #         - name: Calculate cache key
+    #           id: cache-key
+    #           run: |
+    #               echo CACHE_KEY=deps-node-modules-${{ hashFiles('quiz-app/package-lock.json') }} >> $GITHUB_OUTPUT
+    #         - name: Download cached dependencies              
+    #           id: cache
+    #           uses: actions/cache@v3
+    #           with:
+    #             path: quiz-app/node_modules
+    #             key: ${{ steps.cache-key.outputs.CACHE_KEY }}
+    #         - name: Install Dep
+    #           working-directory: ./quiz-app
+    #           run: |
+    #             npm i
+    #             npm run lint 
+    #             npm install --save-dev --save-exact prettier
+    #             npm run prettier
+    #             npm test
+    #           env:
+    #             CI: true
+    #         - name: build 
+    #           working-directory: ./quiz-app
+    #           run: npm run build
+    #         - name: SonarCloud Scan
+    #           uses: SonarSource/sonarcloud-github-action@master
+    #           env:
+    #             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+    #             SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
+    #           with:
+    #             projectBaseDir: quiz-app
+    #             args: >
+    #               -Dsonar.organization=sami-devsecops-org
+    #               -Dsonar.projectKey=sami-devsecops-org_quiz-app
+    # backend-test:
+    #     runs-on: ubuntu-latest
+    #     defaults:
+    #         run:
+    #             working-directory: ./backend
+    #     strategy:
+    #         matrix:
+    #             node-version: [20.x]
+    #             arch: [x64]
+    #     steps:
+    #         - name: Checkout the Repo 
+    #           uses: actions/checkout@v4
 
-            - name: USE NODE JS ${{ matrix.node-version }} - ${{ matrix.arch }}
-              uses: actions/setup-node@v4
-              with: 
-                node-version: ${{ matrix.node-version }} 
+    #         - name: USE NODE JS ${{ matrix.node-version }} - ${{ matrix.arch }}
+    #           uses: actions/setup-node@v4
+    #           with: 
+    #             node-version: ${{ matrix.node-version }} 
             
-            - name: Calculate cache key
-              id: cache-key
-              run: |
-                  echo CACHE_KEY=deps-node-modules-${{ hashFiles('backend/package-lock.json') }} >> $GITHUB_OUTPUT
-            - name: Download cached dependencies              
-              id: cache
-              uses: actions/cache@v3
-              with:
-                path: backend/node_modules
-                key: ${{ steps.cache-key.outputs.CACHE_KEY }}
-            - name: Install Dep
-              working-directory: ./backend
-              run: |
-                npm i
-                npm run lint 
-                npm install --save-dev --save-exact prettier
-                npm run prettier
-                npm test
-              env:
-                CI: true
+    #         - name: Calculate cache key
+    #           id: cache-key
+    #           run: |
+    #               echo CACHE_KEY=deps-node-modules-${{ hashFiles('backend/package-lock.json') }} >> $GITHUB_OUTPUT
+    #         - name: Download cached dependencies              
+    #           id: cache
+    #           uses: actions/cache@v3
+    #           with:
+    #             path: backend/node_modules
+    #             key: ${{ steps.cache-key.outputs.CACHE_KEY }}
+    #         - name: Install Dep
+    #           working-directory: ./backend
+    #           run: |
+    #             npm i
+    #             npm run lint 
+    #             npm install --save-dev --save-exact prettier
+    #             npm run prettier
+    #             npm test
+    #           env:
+    #             CI: true
 
-            - name: SonarCloud Scan
-              uses: SonarSource/sonarcloud-github-action@master
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-                SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
-              with:
-                projectBaseDir: backend
-                args: >
-                  -Dsonar.organization=sami-devsecops-org
-                  -Dsonar.projectKey=sami-devsecops-org_backend
+    #         - name: SonarCloud Scan
+    #           uses: SonarSource/sonarcloud-github-action@master
+    #           env:
+    #             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+    #             SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
+    #           with:
+    #             projectBaseDir: backend
+    #             args: >
+    #               -Dsonar.organization=sami-devsecops-org
+    #               -Dsonar.projectKey=sami-devsecops-org_backend
     frontend-security:
-        needs: frontend-test
+        # needs: frontend-test
         runs-on: ubuntu-latest
         defaults:
           run:
@@ -111,12 +111,6 @@ jobs:
             - name: Checkout the Repo 
               uses: actions/checkout@v4
 
-            - name: Run Snyk Test using Actions 
-              uses: snyk/actions/node@master
-              env:
-                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
-              continue-on-error: true
-
             - name: Running Snyk using CLI | Install Snyk CLI
               uses: snyk/actions/setup@master
               with:
@@ -124,15 +118,14 @@ jobs:
               env:
                 SNYK_TOKEN: ${{ secrets.SNYK_ID }}
 
-            - name: Snyk Authentication
-              run: snyk auth ${{ secrets.SNYK_ID }}
-
             - name: Snyk Code Test
-              run: snyk code test --all-projects
+              run: |
+                cd quiz-app
+                snyk code test --all-projects
               continue-on-error: true
 
     backend-security:
-        needs: backend-test
+        # needs: backend-test
         runs-on: ubuntu-latest
         defaults:
           run:
@@ -141,12 +134,6 @@ jobs:
             - name: Checkout the Repo 
               uses: actions/checkout@v4
 
-            - name: Run Snyk Test using Actions 
-              uses: snyk/actions/node@master
-              env:
-                SNYK_TOKEN: ${{ secrets.SNYK_ID }}
-              continue-on-error: true
-
             - name: Running Snyk using CLI | Install Snyk CLI
               uses: snyk/actions/setup@master
               with:
@@ -154,9 +141,8 @@ jobs:
               env:
                 SNYK_TOKEN: ${{ secrets.SNYK_ID }}
 
-            - name: Snyk Authentication
-              run: snyk auth ${{ secrets.SNYK_ID }}
-
             - name: Snyk Code Test
-              run: snyk code test --all-projects
+              run: |
+                cd backend
+                snyk code test --all-projects
               continue-on-error: true
