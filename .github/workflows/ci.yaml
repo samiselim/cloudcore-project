@@ -120,7 +120,7 @@ jobs:
 
             - name: Snyk Code Test
               run: |
-                cd quiz-app
+                cd ./quiz-app
                 snyk code test --all-projects
               continue-on-error: true
 
@@ -143,6 +143,6 @@ jobs:
 
             - name: Snyk Code Test
               run: |
-                cd backend
+                cd ./backend
                 snyk code test --all-projects
               continue-on-error: true
