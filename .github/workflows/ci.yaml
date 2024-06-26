@@ -211,13 +211,13 @@ jobs:
             working-directory: backend
             run: |
               echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
-              docker build . -t ${{ secrets.DOCKER_USER }}/backend-js:${{ github.sha }}
-              docker push ${{ secrets.DOCKER_USER }}/backend-js:${{ github.sha }}
+              docker build . -t ${{ secrets.DOCKER_USER }}/backend-api:${{ github.sha }}
+              docker push ${{ secrets.DOCKER_USER }}/backend-api:${{ github.sha }}
 
           - name: Run Trivy Vulnerability scanner 
             uses: aquasecurity/trivy-action@master
             with:
-                image-ref: 'docker.io/${{ secrets.DOCKER_USER }}/backend-js:${{ github.sha }}'
+                image-ref: 'docker.io/${{ secrets.DOCKER_USER }}/backend-api:${{ github.sha }}'
                 format: 'sarif'
                 output: trivy-result.sarif
                 severity: 'CRITICAL,HIGH'
@@ -234,13 +234,13 @@ jobs:
 
           - name: Snyk Container Monitor 
             run: |
-              snyk container monitor ${{ secrets.DOCKER_USER }}/backend-js:${{ github.sha }} --file=Dockerfile
+              snyk container monitor ${{ secrets.DOCKER_USER }}/backend-api:${{ github.sha }} --file=Dockerfile
             working-directory: backend
 
           - name: Run Snyk scan for backend image
             uses: snyk/actions/docker@master
             with:
-              image: ${{ secrets.DOCKER_USER }}/backend-js:${{ github.sha }}
+              image: ${{ secrets.DOCKER_USER }}/backend-api:${{ github.sha }}
               args: --file=backend/Dockerfile --severity-threshold=high
             env:
                 SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
