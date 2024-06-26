@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: samiselim/backend-api:8eccf921c85c783f5c6595cc5405ac1ab14b6aba
+        image: samiselim/backend-api:304cbfe3b4f93d6978b84cc7be38fcd6eee14649
         ports:
         - containerPort: 3000
         env:
