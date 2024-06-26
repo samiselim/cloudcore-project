@@ -14,7 +14,8 @@ sudo apt update -y
 # Install Docker 
 sudo apt install docker.io -y
 sudo usermod -aG docker ubuntu
-sudo systemctl enable --now docker 
+sudo systemctl enable --now docker  
+sudo chmod 777 /var/run/docker.sock
 
 # Wait for Docker to initialize
 sleep 10
@@ -33,16 +34,16 @@ sudo chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 kubectl version --client
 
-# Install eksctl
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/local/bin
-eksctl version
+# # Install eksctl
+# curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+# sudo mv /tmp/eksctl /usr/local/bin
+# eksctl version
 
 # Install Terraform
-wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update
-sudo apt install terraform -y
+# wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+# echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+# sudo apt update
+# sudo apt install terraform -y
 
 # # Install Trivy
 # sudo apt-get install wget apt-transport-https gnupg lsb-release -y
@@ -56,15 +57,15 @@ sudo apt install terraform -y
 # kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
 # sudo apt install jq -y
 
-# # Installing Helm
-# sudo snap install helm --classic
+# Installing Helm
+sudo snap install helm --classic
 
 # # Adding Helm repositories
 
-# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-# helm repo add grafana https://grafana.github.io/helm-charts
-# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-# helm repo update
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
 
 # # Install Prometheus
 # helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace

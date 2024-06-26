@@ -258,3 +258,27 @@ jobs:
                 args: --severity-threshold=high
             env:
                 SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    update-deployments:
+        permissions: 
+          id-token: write
+          contents: write
+        needs: [k8s-scan]
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+        - name: Create local changes
+          run: |
+            sed -i 's|image:.*|image: ${{ secrets.DOCKER_USER }}/backend-api:${{ github.sha }}|g' ./kubernetes-manifest/backend.yaml
+            sed -i 's|image:.*|image: ${{ secrets.DOCKER_USER }}/frontend-js:${{ github.sha }}|g' ./kubernetes-manifest/frontend.yaml
+        - name: Commit files
+          run: |
+            git config --local user.email "github-actions.com"
+            git config --local user.name "github-actions"
+            git add .
+            git commit -m "Edit Deployment files with the new images"
+            
+        - name: Push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
