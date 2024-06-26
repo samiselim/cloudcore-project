@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ogochukwuozotta/backend-api:latest
+        image: samiselim/backend-api:8eccf921c85c783f5c6595cc5405ac1ab14b6aba
         ports:
         - containerPort: 3000
         env:
