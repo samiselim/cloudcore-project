@@ -75,6 +75,7 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 
+## install 
 # Install Prometheus
 helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
 
