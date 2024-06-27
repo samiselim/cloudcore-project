@@ -1,4 +1,5 @@
-# Quiz App Workflow
+
+# Quiz App
 
 Welcome to the Quiz App repository! This application is designed to provide an interactive quiz experience with a robust backend and a user-friendly frontend.
 
@@ -10,6 +11,7 @@ Welcome to the Quiz App repository! This application is designed to provide an i
 - [Getting Started](#getting-started)
 - [Running the Application](#running-the-application)
 - [CI/CD Pipeline](#cicd-pipeline)
+- [Infrastructure](#infrastructure)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -80,6 +82,22 @@ This project uses GitHub Actions for CI/CD. The workflow includes the following 
 - **k8s-scan:** Scanning Kubernetes manifests for security issues.
 - **update-deployments:** Updating Kubernetes deployments with the new images.
 
+## Infrastructure
+
+This application is deployed on an EKS (Elastic Kubernetes Service) cluster and managed using Argo CD. The infrastructure is created and managed using Terraform IaC (Infrastructure as Code). 
+
+### Key Components
+
+- **EKS Cluster:** The application runs on an Amazon EKS cluster, providing scalability and high availability.
+- **Argo CD:** Continuous deployment tool for Kubernetes. It monitors the Git repository for changes in the Kubernetes manifests and updates the EKS deployments with the new images.
+- **Terraform:** Infrastructure as Code tool used to provision and manage the EKS cluster and related resources.
+
+### Workflow
+
+1. **Image Scanning:** New images for the frontend and backend are scanned for vulnerabilities using Trivy and Snyk.
+2. **Argo CD Deployment:** Argo CD automatically detects changes in the Git repository and updates the EKS deployments with the new images.
+3. **Terraform IaC:** Terraform scripts are used to set up and manage the infrastructure, ensuring a consistent and reproducible environment.
+
 ## Contributing
 
 We welcome contributions to improve the Quiz App. Please fork the repository and create a pull request with your changes.
@@ -89,3 +107,7 @@ We welcome contributions to improve the Quiz App. Please fork the repository and
 3. Commit your Changes
 4. Push to the Branch
 5. Open a Pull Request
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
