@@ -3,19 +3,6 @@
 
 Welcome to the Quiz App repository! This application is designed to provide an interactive quiz experience with a robust backend and a user-friendly frontend.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Getting Started](#getting-started)
-- [Running the Application](#running-the-application)
-- [CI/CD Pipeline](#cicd-pipeline)
-- [Infrastructure](#infrastructure)
-- [Monitoring](#monitoring)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Overview
 
 The Quiz App is a full-stack application that allows users to take quizzes on various topics. It includes a frontend built with React.js and a backend built with Node.js. The app is designed to be secure and scalable, utilizing CI/CD pipelines for continuous integration and delivery.
