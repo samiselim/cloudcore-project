@@ -57,7 +57,7 @@ Ensure you have the following installed:
 
    After downloading, extract the zip file and navigate to the project directory to install the necessary dependencies for both the frontend and backend.
 
-## Running the Application
+## Running the Application Locally
 
 ### Running the Frontend
 
