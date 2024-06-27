@@ -12,6 +12,7 @@ Welcome to the Quiz App repository! This application is designed to provide an i
 - [Running the Application](#running-the-application)
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Infrastructure](#infrastructure)
+- [Monitoring](#monitoring)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -35,10 +36,6 @@ The Quiz App is a full-stack application that allows users to take quizzes on va
 - **Testing:** Jest, Prettier, ESLint
 - **Security:** SonarCloud, Snyk
 
-## Getting Started
-
-To get a local copy up and running, follow these steps.
-
 ### Prerequisites
 
 Ensure you have the following installed:
@@ -46,28 +43,6 @@ Ensure you have the following installed:
 - Node.js (v20.x)
 - npm (Node Package Manager)
 - Docker
-
-### Installation
-
-1. **Clone the repository:**
-
-   You can download the repository by clicking [here](https://github.com/your-username/quiz-app/archive/refs/heads/main.zip).
-
-2. **Install dependencies:**
-
-   After downloading, extract the zip file and navigate to the project directory to install the necessary dependencies for both the frontend and backend.
-
-## Running the Application Locally
-
-### Running the Frontend
-
-Navigate to the frontend directory and start the development server.
-
-### Running the Backend
-
-Navigate to the backend directory and start the backend server.
-
-The application should now be running on `http://localhost:3000` for the frontend and `http://localhost:5000` for the backend.
 
 ## CI/CD Pipeline
 
@@ -86,28 +61,15 @@ This project uses GitHub Actions for CI/CD. The workflow includes the following 
 
 This application is deployed on an EKS (Elastic Kubernetes Service) cluster and managed using Argo CD. The infrastructure is created and managed using Terraform IaC (Infrastructure as Code). 
 
-### Key Components
-
-- **EKS Cluster:** The application runs on an Amazon EKS cluster, providing scalability and high availability.
-- **Argo CD:** Continuous deployment tool for Kubernetes. It monitors the Git repository for changes in the Kubernetes manifests and updates the EKS deployments with the new images.
-- **Terraform:** Infrastructure as Code tool used to provision and manage the EKS cluster and related resources.
-
 ### Workflow
 
 1. **Image Scanning:** New images for the frontend and backend are scanned for vulnerabilities using Trivy and Snyk.
 2. **Argo CD Deployment:** Argo CD automatically detects changes in the Git repository and updates the EKS deployments with the new images.
 3. **Terraform IaC:** Terraform scripts are used to set up and manage the infrastructure, ensuring a consistent and reproducible environment.
 
-## Contributing
+## Monitoring
 
-We welcome contributions to improve the Quiz App. Please fork the repository and create a pull request with your changes.
+To ensure the application is running smoothly and to monitor its performance, we use Prometheus and Grafana. These tools are installed as pods within the EKS cluster.
 
-1. Fork the Project
-2. Create your Feature Branch
-3. Commit your Changes
-4. Push to the Branch
-5. Open a Pull Request
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+- **Prometheus:** Collects and stores metrics from various components of the application.
+- **Grafana:** Provides a visual interface to query, visualize, and alert on metrics collected by Prometheus.
